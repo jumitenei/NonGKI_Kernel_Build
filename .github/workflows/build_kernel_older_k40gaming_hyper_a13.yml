@@ -315,38 +315,7 @@ jobs:
           fi
           echo "PACK_METHOD=${{ env.PACK_METHOD }}" >> $GITHUB_ENV
 
-          if [[ ${{ env.KERNELSU_METHOD }} == "shell" ]]; then
-            if [[ "${{ env.KERNELSU_SOURCE }}" != *".sh" ]]; then
-                echo "You need to provide a link ending with .sh, not one ending with .git or any other extension !"
-                false
-            else
-                curl -sSL ${{ env.KERNELSU_SOURCE }} | bash -s ${{ env.KERNELSU_BRANCH }}
-            fi
-          elif [[ ${{ env.KERNELSU_METHOD }} == "manual" ]]; then
-            if [[ "${{ env.KERNELSU_SOURCE }}" != *".git" ]]; then
-                echo "You need to provide a link ending with .git, not one ending with .sh or any other extension !"
-                false
-            else
-                rm -rf KernelSU && rm -rf KernelSU-Next
-                git clone ${{ env.KERNELSU_SOURCE }} -b ${{ env.KERNELSU_BRANCH }} ${{ env.KERNELSU_NAME }}
-                ln -sf "$(realpath --relative-to="$GITHUB_WORKSPACE/device_kernel/drivers" "$GITHUB_WORKSPACE/device_kernel/${{ env.KERNELSU_NAME }}/kernel")" "kernelsu"
-                grep -q "kernelsu" "$GITHUB_WORKSPACE/device_kernel/drivers/Makefile" || printf "\nobj-\$(CONFIG_KSU) += kernelsu/\n" >> $GITHUB_WORKSPACE/device_kernel/drivers/Makefile
-                grep -q "source \"drivers/kernelsu/Kconfig\"" "$GITHUB_WORKSPACE/device_kernel/drivers/Kconfig" || sed -i "/endmenu/i\source \"drivers/kernelsu/Kconfig\"" "$GITHUB_WORKSPACE/device_kernel/drivers/Kconfig"
-                echo "KernelSU Settings done."
-            fi
-          elif [[ ${{ env.KERNELSU_METHOD }} == "only" ]];then
-            if [[ "${{ env.KERNELSU_SOURCE }}" != *".git" ]]; then
-                echo "You need to provide a link ending with .git, not one ending with .sh or any other extension !"
-                false
-            else
-                rm -rf *KernelSU* && rm -rf drivers/kernelsu
-                git clone ${{ env.KERNELSU_SOURCE }} -b ${{ env.KERNELSU_BRANCH }} ${{ env.KERNELSU_NAME }}
-                ln -sf ../${{ env.KERNELSU_NAME }}/kernel drivers/kernelsu
-                echo "KernelSU git done."
-            fi
-          else
-            false
-          fi
+          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-main
           echo "KERNELSU_METHOD=${{ env.KERNELSU_METHOD }}" >> $GITHUB_ENV
           KSU_VERSION=$(cd ${{ env.KERNELSU_NAME }} && expr $(/usr/bin/git rev-list --count HEAD) + 10200)
           echo "UPLOADNAME=-${{ env.KERNELSU_NAME }}_$KSU_VERSION" >> $GITHUB_ENV
