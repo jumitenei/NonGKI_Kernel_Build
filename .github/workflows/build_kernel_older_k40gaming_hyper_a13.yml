@@ -299,6 +299,7 @@ jobs:
 
           #lz4kd
           echo "正在打lz4kd补丁"
+          cd $GITHUB_WORKSPACE/device_kernel
           patch -p1 -F 3 < lz4k_4.14.patch || true
           echo '完成LZ4KD补丁'
 
