@@ -649,10 +649,6 @@ jobs:
           MERGE_CONFIG_FILES=("vendor/debugfs.config" "vendor/lahaina_QGKI.config")
           export PATH=$GITHUB_WORKSPACE/clang-custom/bin:$PATH
           cd $GITHUB_WORKSPACE/device_kernel/
-          sed -i 's/ -dirty//g'; common/scripts/setlocalversion
-          sed -i 's/ -dirty//g' msm-kernel/scripts/setlocalversion
-          sed -i 's/ -dirty//g' external/dtc/scripts/setlocalversion
-          sed -i '$i res=$(echo "$res" | sed '\''s/-dirty//g'\'')' common/scripts/setlocalversion
           if [ -z "${{ env.GCC_32 }}" ] && [ -z "${{ env.GCC_64 }}" ]; then
             make CC="ccache clang" O=out ARCH=arm64 ${{ env.CUSTOM_CMDS }} ${{ env.EXTRA_CMDS }} ${{ env.DEFCONFIG_NAME }}
             if [[ "${{ env.BUILD_OTHER_CONFIG }}"  == "true" ]]; then
