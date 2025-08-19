@@ -619,6 +619,11 @@ jobs:
 
           patch -p1 < susfs_upgrade_to_159.patch || true
 
+          # Patch hide
+          echo "正在打hide补丁"
+          patch -p1 -F 3 < 69_hide_stuff.patch
+          echo '完成hide补丁'
+
           # Upgrade 1.5.10
           if grep -q "CONFIG_KSU" "fs/exec.c"; then
             cp /tmp/Patches/Patch/susfs_upgrade_to_1510_${{ env.KERNEL_VERSION }}.patch ./
