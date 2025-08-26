@@ -173,10 +173,6 @@ jobs:
             ARCH=arm
           fi
 
-          echo "CONFIG_KSU=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
-          if [[ "${{ env.KERNELSU_SOURCE }}" == *rsuntk* ]] || [[ "${{ env.KERNELSU_SOURCE }}" == *SukiSU* ]]; then
-            echo "CONFIG_KSU_MANUAL_HOOK=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
-          fi
           if [[ "${{ env.KERNELSU_SOURCE }}" == *SukiSU* ]] && [[ "${{ env.KPM_ENABLE }}" == "true" ]]; then
             echo "CONFIG_KALLSYMS=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
             echo "CONFIG_KALLSYMS_ALL=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
