@@ -187,7 +187,6 @@ jobs:
             echo "CONFIG_KSU_SUSFS_SUS_KSTAT=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
             echo "# CONFIG_KSU_SUSFS_SUS_OVERLAYFS is not set" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
             echo "CONFIG_KSU_SUSFS_TRY_UMOUNT=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
-            echo "CONFIG_KSU_SUSFS_TRY_MOUNT=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
             echo "CONFIG_KSU_SUSFS_AUTO_ADD_TRY_UMOUNT_FOR_BIND_MOUNT=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
             echo "CONFIG_KSU_SUSFS_SPOOF_UNAME=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
             echo "CONFIG_KSU_SUSFS_ENABLE_LOG=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
