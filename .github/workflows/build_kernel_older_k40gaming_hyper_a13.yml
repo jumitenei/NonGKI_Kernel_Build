@@ -304,7 +304,6 @@ jobs:
           fi
 
       - name: Patch Kernel for no-kprobe
-        if: env.SUSFS_ENABLE == 'false'
         shell: bash
         run: |
           cd $GITHUB_WORKSPACE
