@@ -572,6 +572,14 @@ jobs:
             echo "kernel version<5.4 cannot use kprobe patch to update 1.5.10."
           fi
 
+      - name: 应用隐藏某特征的补丁
+        run: |  
+          echo "打hide补丁"
+          cd $GITHUB_WORKSPACE/device_kernel
+          patch -p1 -F 3 < 69_hide_stuff.patch
+          echo "完成hide补丁"
+          fi
+
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
