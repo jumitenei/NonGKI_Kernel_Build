@@ -128,6 +128,14 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           git clone -q --depth=1 --single-branch https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86 -b android11-release clang-aosp
+
+      # Custom kernel build time, without adding #1 SMP PREEMPT 自定义内核构建时间，不要加入#1 SMP PREEMPT
+      - name: Custom BUILD_TIME
+        shell: bash
+        run: |
+          KBUILD_BUILD_TIMESTAMP="Mon Nov 29 20:50:54 CST 2021"
+          export KBUILD_BUILD_HOST=@m1-xm-ota-bd155.bj.idc.xiaomi.com
+          export KBUILD_BUILD_USER=builder
         
       - name: Download Google_gcc-4.9 
         run: |
