@@ -383,6 +383,7 @@ jobs:
           fi
 
       - name: Patch Kernel for no-kprobe
+        if: env.HAVE_NO_DTBO == 'tre'
         shell: bash
         run: |
           cd $GITHUB_WORKSPACE
