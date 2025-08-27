@@ -19,6 +19,7 @@ env:
   BUILD_DEBUGGER: "false" # Output build errors.
   BUILD_OTHER_CONFIG: "false" # Merge config files.
   REKERNEL_ENABLE: "false" # if u need Re:Kernel.
+  BUILD_TIME: "Mon Nov 29 20:50:54 CST 2021"
 
 
 jobs:
@@ -133,9 +134,28 @@ jobs:
       - name: Custom BUILD_TIME
         shell: bash
         run: |
-          KBUILD_BUILD_TIMESTAMP="Mon Nov 29 20:50:54 CST 2021"
-          export KBUILD_BUILD_HOST=@m1-xm-ota-bd155.bj.idc.xiaomi.com
-          export KBUILD_BUILD_USER=builder
+         echo "Custom BUILD_TIME: ${{ github.event.inputs.BUILD_TIME }}"
+          INPUT_TIME="${{ github.event.inputs.BUILD_TIME }}"
+          if [[ -n "$INPUT_TIME" && "$INPUT_TIME" != *[Ff]* ]]; then
+            DATESTR="$INPUT_TIME"
+            echo "Using input BUILD_TIME: $DATESTR"
+          else
+            DATESTR="$(TZ='UTC' date +'%a %b %d %T %Z %Y')"
+            echo "Using UTC time as fallback: $DATESTR"
+          fi
+          echo "KBUILD_BUILD_TIMESTAMP=${DATESTR}" >> "$GITHUB_ENV"
+          echo "KBUILD_BUILD_VERSION=1" >> "$GITHUB_ENV"
+          cd kernel_workspace/kernel_platform/
+          for f in common/scripts/mkcompile_h msm-kernel/scripts/mkcompile_h; do
+            if [ -f "$f" ]; then
+              echo "Patching mkcompile_h with BUILD_TIME=$DATESTR"
+              if grep -q 'UTS_VERSION=' "$f"; then
+                perl -pi -e "s{UTS_VERSION=\"\\\$\\(.*?\\)\"}{UTS_VERSION=\"#1 SMP PREEMPT $DATESTR\"}" "$f"
+              else
+                perl -0777 -pi -e "s{cat <<EOF}{cat <<EOF\n#undef UTS_VERSION\n#define UTS_VERSION \"#1 SMP PREEMPT $DATESTR\" } unless /UTS_VERSION/" "$f"
+              fi
+            fi
+          done
         
       - name: Download Google_gcc-4.9 
         run: |
@@ -561,6 +581,8 @@ jobs:
         run: |
           MERGE_CONFIG_FILES=("vendor/debugfs.config" "vendor/lahaina_QGKI.config")
           export PATH=$GITHUB_WORKSPACE/clang-aosp/clang-r383902/bin:$GITHUB_WORKSPACE/gcc-64/bin:$GITHUB_WORKSPACE/gcc-32/bin:$PATH
+          export KBUILD_BUILD_HOST=m1-xm-ota-bd155.bj.idc.xiaomi.com
+          export KBUILD_BUILD_USER=builder
           cd $GITHUB_WORKSPACE/device_kernel
           make -j$(nproc --all) CC=clang O=out ARCH=arm64 CLANG_TRIPLE=aarch64-linux-gnu- CROSS_COMPILE=aarch64-linux-android- CROSS_COMPILE_ARM32=arm-linux-androideabi- ares_user_defconfig
           make -j$(nproc --all) CC="ccache clang" O=out ARCH=arm64 CLANG_TRIPLE=aarch64-linux-gnu- LD=ld.lld CROSS_COMPILE=aarch64-linux-android- CROSS_COMPILE_ARM32=arm-linux-androideabi-
