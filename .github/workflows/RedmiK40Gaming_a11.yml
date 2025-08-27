@@ -166,6 +166,7 @@ jobs:
 
       # Custom kernel build time, without adding #1 SMP PREEMPT 自定义内核构建时间，不要加入#1 SMP PREEMPT
       - name: Custom BUILD_TIME
+        if: env.HAVE_NO_DTBO == 'tre'
         shell: bash
         run: |
          echo "Custom BUILD_TIME: ${{ github.event.inputs.BUILD_TIME }}"
@@ -583,6 +584,8 @@ jobs:
           export PATH=$GITHUB_WORKSPACE/clang-aosp/clang-r383902/bin:$GITHUB_WORKSPACE/gcc-64/bin:$GITHUB_WORKSPACE/gcc-32/bin:$PATH
           export KBUILD_BUILD_HOST=m1-xm-ota-bd155.bj.idc.xiaomi.com
           export KBUILD_BUILD_USER=builder
+          export KBUILD_BUILD_TIMESTAMP="Mon Nov 29 20:50:54 CST 2021"
+          export KBUILD_BUILD_VERSION=1
           cd $GITHUB_WORKSPACE/device_kernel
           make -j$(nproc --all) CC=clang O=out ARCH=arm64 CLANG_TRIPLE=aarch64-linux-gnu- CROSS_COMPILE=aarch64-linux-android- CROSS_COMPILE_ARM32=arm-linux-androideabi- ares_user_defconfig
           make -j$(nproc --all) CC="ccache clang" O=out ARCH=arm64 CLANG_TRIPLE=aarch64-linux-gnu- LD=ld.lld CROSS_COMPILE=aarch64-linux-android- CROSS_COMPILE_ARM32=arm-linux-androideabi-
