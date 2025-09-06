@@ -573,6 +573,7 @@ jobs:
           fi
 
       - name: 应用隐藏某特征的补丁
+        if: env.GCC_GNU == 'true'
         run: |  
           echo "打hide补丁"
           cd $GITHUB_WORKSPACE/device_kernel
