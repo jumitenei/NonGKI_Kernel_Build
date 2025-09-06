@@ -579,13 +579,6 @@ jobs:
           patch -p1 -F 3 < 69_hide_stuff.patch
           echo "完成hide补丁"
 
-      - name: 应用lz4kd补丁
-        run: |  
-          echo "打lz4kd补丁"
-          cd $GITHUB_WORKSPACE/device_kernel
-          patch -p1 -F 3 < lz4kd_to_49.patch
-          echo "完成lz4kd补丁"
-
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
         with:
