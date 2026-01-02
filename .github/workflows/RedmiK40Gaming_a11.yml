@@ -570,8 +570,8 @@ jobs:
       - name: 应用编译补丁
         run: |  
           echo "打hide补丁"
-          cd $GITHUB_WORKSPACE/device_kernel
-          patch -p1 < ksu_4.14_import_ns.patch
+          ##cd $GITHUB_WORKSPACE/device_kernel
+          ##patch -p1 < ksu_4.14_import_ns.patch
           echo "完成hide补丁"
 
       - name: Setup ccache
