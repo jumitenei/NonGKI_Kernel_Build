@@ -223,12 +223,6 @@ jobs:
             echo "CONFIG_KSU_SUSFS_SPOOF_CMDLINE_OR_BOOTCONFIG=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
             echo "CONFIG_KSU_SUSFS_OPEN_REDIRECT=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
           fi
-          if [[ "${{ env.LXC_ENABLE }}" == "true" ]]; then
-           echo "CONFIG_VIRTUALIZATION=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
-           echo "CONFIG_KVM=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
-           echo "CONFIG_VHOST_NET=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
-           echo "CONFIG_VHOST_CROSS_ENDIAN_LEGACY=y" >> ./arch/$ARCH/configs/${{ env.DEFCONFIG_NAME }}
-          fi
 
       - name: Set Pack Method and KernelSU and SUSFS
         shell: bash
@@ -243,6 +237,7 @@ jobs:
             if [[ -d "Anykernel3" ]]; then
               echo "Found Anykernel3 in Kernel!"
             else
+              set -x
               git clone ${{ env.AK3_SOURCE }} -b ${{ env.AK3_BRANCH }} Anykernel3 --depth=1
             fi
           elif [[ ${{ env.PACK_METHOD }} == "MKBOOTIMG" ]]; then
