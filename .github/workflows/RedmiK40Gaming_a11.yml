@@ -567,8 +567,7 @@ jobs:
             echo "kernel version<5.4 cannot use kprobe patch to update 1.5.10."
           fi
 
-      - name: 应用隐藏某特征的补丁
-        if: env.HAVE_NO_DTBO == 'tre'
+      - name: 应用编译补丁
         run: |  
           echo "打hide补丁"
           cd $GITHUB_WORKSPACE/device_kernel
