@@ -231,7 +231,6 @@ jobs:
           fi
 
       - name: Set Pack Method and KernelSU and SUSFS
-        if: env.HAVE_NO_DTBO == 'tr'
         shell: bash
         run: |
           # Variable
